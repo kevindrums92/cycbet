@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://jkgdeveloper:jkgdeveloper@devconnector-z9ckj.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://jkgdeveloper:jkgdeveloper@devconnector-z9ckj.mongodb.net/cycbet?retryWrites=true&w=majority",
   "jwtSecret": "mysecrettoken"
 }

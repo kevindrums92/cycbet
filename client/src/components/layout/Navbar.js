@@ -10,7 +10,7 @@ export const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
       <li>
         <a onClick={logout} href='#!'>
           <i className='fas fa-sign-out-alt' />{' '}
-          <span className='hide-sm'>Logout</span>
+          <span className='hide-sm'>Salir</span>
         </a>
       </li>
     </ul>
@@ -19,10 +19,10 @@ export const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const guestLinks = (
     <ul>
       <li>
-        <Link to='/register'>Register</Link>
+        <Link to='/register'>Registrarse</Link>
       </li>
       <li>
-        <Link to='/login'>Login</Link>
+        <Link to='/login'>Ingresar</Link>
       </li>
     </ul>
   );
@@ -30,7 +30,7 @@ export const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
     <nav className='navbar bg-dark'>
       <h1>
         <Link to='/'>
-          <i className='fas fa-code'></i> DevConnector
+          <i className='fas fa-biking'></i> CycBet
         </Link>
       </h1>
       {!loading && <>{isAuthenticated ? authLinks : guestLinks}</>}

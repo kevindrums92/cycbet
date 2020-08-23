@@ -43,6 +43,6 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "concurrently": "5.1.0"
+    "concurrently": "5.3.0"
   }
 }

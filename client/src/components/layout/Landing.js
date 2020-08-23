@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 const Landing = ({ isAuthenticated }) => {
   //Redirect if logged in
   if (isAuthenticated) {
@@ -11,18 +11,18 @@ const Landing = ({ isAuthenticated }) => {
     <section className='landing'>
       <div className='dark-overlay'>
         <div className='landing-inner'>
-          <h1 className='x-large'>Developer Connector</h1>
+          <h1 className='x-large'>A full gass!</h1>
           <p className='lead'>
-            Create a developer profile/portfolio, share posts and get help from
-            other developers
+            Arma tu parche, haz tus predicciones de ganador de etapa y podio en
+            este Tour de Francia 2020
           </p>
           <div className='buttons'>
-            <a href='register.html' className='btn btn-primary'>
-              Sign Up
-            </a>
-            <a href='login.html' className='btn btn-light'>
-              Login
-            </a>
+            <Link className='btn btn-primary' to='/register'>
+              Registrarse
+            </Link>
+            <Link className='btn btn-light' to='/login'>
+              Ingresar
+            </Link>
           </div>
         </div>
       </div>

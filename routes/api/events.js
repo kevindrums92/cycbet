@@ -70,6 +70,15 @@ router.post(
         return res.status(400).jsonp({ msg: 'Event not found' });
       }
 
+      //validate if the user already exists in the event
+      let eventUser = await Eventusers.findOne({
+        event: event.id,
+        user: req.user.id,
+      });
+      if (eventUser) {
+        return res.status(400).jsonp({ msg: 'User already joined this event' });
+      }
+
       eventusersFields.event = event.id;
 
       //Create

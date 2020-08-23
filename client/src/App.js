@@ -13,6 +13,7 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './components/routing/PrivateRoute';
+import JoinEvent from './components/dashboard/JoinEvent';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -37,6 +38,11 @@ const App = () => {
                 exact
                 path='/dashboard'
                 component={Dashboard}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path='/joinevent'
+                component={JoinEvent}
               ></PrivateRoute>
             </Switch>
           </section>

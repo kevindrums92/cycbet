@@ -7,13 +7,30 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const User = require('../../models/User');
+const Event = require('../../models/Event');
+const Eventusers = require('../../models/Eventusers');
 // @route GET api/auth
 // @desc Test route
 // @access Public
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    const { id } = req.user;
+    const user = await User.findById(id).select('-password');
+
+    const ownEvents = await Event.find({ creator: id });
+    const events = await Eventusers.find({ user: id }).populate('event', [
+      'name',
+      'startdate',
+      'code',
+    ]);
+    user.events = events;
+    user.ownEvents = ownEvents;
+
+    res.json({
+      user,
+      events,
+      ownEvents,
+    });
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');
