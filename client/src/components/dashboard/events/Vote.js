@@ -65,7 +65,7 @@ const Vote = ({
         });
       }
     }
-  }, []);
+  }, [eventId, podiumvotes, stageId, type, votes]);
 
   if (event._id === undefined) {
     return <Redirect to='/dashboard' />;

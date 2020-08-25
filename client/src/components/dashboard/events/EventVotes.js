@@ -20,7 +20,7 @@ const EventVotes = ({
 
   useEffect(() => {
     getDataForUser(eventId);
-  }, []);
+  }, [eventId, getDataForUser]);
 
   const getPodioCard = () => {
     const myPodium = getPodiumVote(podiumvotes, event._id);
@@ -32,7 +32,7 @@ const EventVotes = ({
             <h5 className='card-title'>Podio de la carrera</h5>
             <small id='emailHelp' class='form-text text-warning'>
               Fecha límite para votar: <br />
-              2019/08/12
+              <Moment format='YYYY/MM/DD HH:mm'>{event.startdate}</Moment>
             </small>
             <p className='card-text'>
               {!myPodium && <>No hay votación aún!</>}
@@ -56,7 +56,16 @@ const EventVotes = ({
               )}
             </p>
             <Link className='btn btn-primary' to={`/podiumvote/${event._id}`}>
-              <i className='fas fa-arrow-right'></i> Votar
+              {!myPodium && (
+                <>
+                  <i className='fas fa-arrow-right'></i> Votar
+                </>
+              )}
+              {myPodium && (
+                <>
+                  <i className='fas fa-edit'></i> Editar
+                </>
+              )}
             </Link>
           </div>
         </div>
@@ -75,7 +84,7 @@ const EventVotes = ({
               <h5 className='card-title'>{stage.name}</h5>
               <small id='emailHelp' class='form-text text-warning'>
                 Fecha límite para votar: <br />
-                <Moment format='YYYY/MM/DD'>{stage.maxdatevote}</Moment>
+                <Moment format='YYYY/MM/DD HH:mm'>{stage.maxdatevote}</Moment>
               </small>
               <p className='card-text'>
                 {!myStageVote && <>No hay votación aún!</>}
@@ -96,7 +105,16 @@ const EventVotes = ({
                 )}
               </p>
               <Link className='btn btn-dark' to={`/stagevote/${stage._id}`}>
-                <i className='fas fa-arrow-right'></i> Votar
+                {!myStageVote && (
+                  <>
+                    <i className='fas fa-arrow-right'></i> Votar
+                  </>
+                )}
+                {myStageVote && (
+                  <>
+                    <i className='fas fa-edit'></i> Editar
+                  </>
+                )}
               </Link>
             </div>
           </div>

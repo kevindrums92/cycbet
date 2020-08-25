@@ -31,69 +31,85 @@ const Dashboard = ({ auth }) => {
         </div>
       )}
 
-      {!auth.loading && (events || ownEvents) && (
-        <>
-          <h2 className='mt-5 mb-3'>Eventos</h2>
-          <table className='table'>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Creador</th>
-                <th className='hide-sm'>F Inicio</th>
-                <th className='hide-sm'>Código</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ownEvents &&
-                ownEvents.map((event) => (
-                  <tr>
-                    <td>{event.name}</td>
-                    <td>
-                      Yo <i className='fas fa-hand-pointer text-primary'></i>
-                    </td>
-                    <td className='hide-sm'>
-                      <Moment format='YYYY/MM/DD'>{event.startdate}</Moment>
-                    </td>
-                    <td className='hide-sm'>{event.code}</td>
-                    <td>
-                      <button type='button' class='btn btn-primary'>
-                        <i class='fas fa-edit'></i>
-                      </button>
-                      <Link
-                        className='btn btn-dark'
-                        to={`/eventvotes/${event._id}`}
-                      >
-                        <i class='fas fa-arrow-right'></i>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              {events &&
-                events.map((item) => (
-                  <tr key={item._id}>
-                    <td>{item.event.name}</td>
-                    <td>{item.event.creator.name}</td>
-                    <td className='hide-sm'>
-                      <Moment format='YYYY/MM/DD'>
-                        {item.event.startdate}
-                      </Moment>
-                    </td>
-                    <td className='hide-sm'>{item.event.code}</td>
-                    <td>
-                      <Link
-                        className='btn btn-dark'
-                        to={`/eventvotes/${item.event._id}`}
-                      >
-                        <i className='fas fa-arrow-right'></i>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </>
-      )}
+      {!auth.loading &&
+        (!events || events.length === 0) &&
+        (!ownEvents || ownEvents.length === 0) && (
+          <>
+            <div class='alert alert-info' role='alert'>
+              <h4 class='alert-heading'>Listo para hacer tus predicciones?</h4>
+              <p>
+                No tienes eventos aún, necesitas un código de evento para unirte
+                a uno!
+              </p>
+            </div>
+          </>
+        )}
+
+      {!auth.loading &&
+        ((events && events.length > 0) ||
+          (ownEvents && ownEvents.length > 0)) && (
+          <>
+            <h2 className='mt-5 mb-3'>Eventos</h2>
+            <table className='table'>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Creador</th>
+                  <th className='hide-sm'>F Inicio</th>
+                  <th className='hide-sm'>Código</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ownEvents &&
+                  ownEvents.map((event) => (
+                    <tr>
+                      <td>{event.name}</td>
+                      <td>
+                        Yo <i className='fas fa-hand-pointer text-primary'></i>
+                      </td>
+                      <td className='hide-sm'>
+                        <Moment format='YYYY/MM/DD'>{event.startdate}</Moment>
+                      </td>
+                      <td className='hide-sm'>{event.code}</td>
+                      <td>
+                        <button type='button' class='btn btn-primary'>
+                          <i class='fas fa-edit'></i>
+                        </button>
+                        <Link
+                          className='btn btn-dark'
+                          to={`/eventvotes/${event._id}`}
+                        >
+                          <i class='fas fa-arrow-right'></i>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                {events &&
+                  events.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.event.name}</td>
+                      <td>{item.event.creator.name}</td>
+                      <td className='hide-sm'>
+                        <Moment format='YYYY/MM/DD'>
+                          {item.event.startdate}
+                        </Moment>
+                      </td>
+                      <td className='hide-sm'>{item.event.code}</td>
+                      <td>
+                        <Link
+                          className='btn btn-dark'
+                          to={`/eventvotes/${item.event._id}`}
+                        >
+                          <i className='fas fa-arrow-right'></i>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </>
+        )}
     </>
   );
 };
