@@ -18,10 +18,17 @@ router.get('/', auth, async (req, res) => {
     const user = await User.findById(id).select('-password');
 
     const ownEvents = await Event.find({ creator: id });
-    const events = await Eventusers.find({ user: id }).populate('event', [
-      'name',
-      'startdate',
-      'code',
+    const events = await Eventusers.find({ user: id }).populate([
+      {
+        path: 'event',
+        model: 'Event',
+        select: 'name startdate code',
+        populate: {
+          path: 'creator',
+          model: 'User',
+          select: 'name',
+        },
+      },
     ]);
     user.events = events;
     user.ownEvents = ownEvents;

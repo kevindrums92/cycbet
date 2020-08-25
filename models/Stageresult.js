@@ -9,6 +9,10 @@ const StageresultSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Stage',
   },
+  event: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event',
+  },
   rider1: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Rider',

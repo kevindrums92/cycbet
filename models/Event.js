@@ -17,6 +17,9 @@ const EventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  maxdatevotepodium: {
+    type: Date,
+  },
 });
 
 module.exports = Event = mongoose.model('Event', EventSchema);

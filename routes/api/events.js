@@ -2,8 +2,15 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
+const mongoose = require('mongoose');
 
 const Event = require('../../models/Event');
+const Rider = require('../../models/Rider');
+const Stage = require('../../models/Stage');
+const Vote = require('../../models/Vote');
+const Podiumvote = require('../../models/Podiumvote');
+const Stageresult = require('../../models/Stageresult');
+const Podiumresult = require('../../models/Podiumresult');
 
 const Eventusers = require('../../models/Eventusers');
 
@@ -86,6 +93,145 @@ router.post(
 
       await eventusers.save();
       res.json(eventusers);
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+const ridersPopulateObject = [
+  {
+    path: 'rider1',
+    model: 'Rider',
+    select: 'name',
+  },
+  {
+    path: 'rider2',
+    model: 'Rider',
+    select: 'name',
+  },
+  {
+    path: 'rider3',
+    model: 'Rider',
+    select: 'name',
+  },
+];
+
+// @route GET api/event/getDataForUser/:user_id
+// @desc Get event data by event Id
+// @access Private
+router.get('/getDataForUser/:event_id', [auth], async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { event_id } = req.params;
+    const event = await Event.findById(event_id).populate([
+      {
+        path: 'creator',
+        model: 'User',
+        select: 'name',
+      },
+    ]);
+    if (!event) {
+      return res.status(400).jsonp({ msg: 'Event not found' });
+    }
+
+    const riders = await Rider.find({ event: event_id });
+
+    const stages = await Stage.find({ event: event_id });
+
+    const votes = await Vote.find({ user: id }).populate(ridersPopulateObject);
+
+    const podiumvotes = await Podiumvote.find({ user: id }).populate(
+      ridersPopulateObject
+    );
+
+    const stageResults = await Stageresult.find({ event: event_id }).populate(
+      ridersPopulateObject
+    );
+
+    const podiumResults = await Podiumresult.find({ event: event_id }).populate(
+      ridersPopulateObject
+    );
+
+    res.json({
+      event,
+      riders,
+      stages,
+      votes,
+      podiumvotes,
+      stageResults,
+      podiumResults,
+    });
+  } catch (err) {
+    if (err instanceof mongoose.CastError) {
+      return res.status(400).jsonp({ msg: 'Event not found' });
+    }
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route POST api/events/vote
+// @desc insert podium vote
+// @access Private
+router.post(
+  '/vote',
+  [
+    auth,
+    [
+      check('eventid', 'Event id is required').not().isEmpty(),
+      check('rider1', 'Rider 1 is required').not().isEmpty(),
+      check('rider2', 'Rider 2 is required').not().isEmpty(),
+      check('rider3', 'Rider 3 is required').not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { eventid, rider1, rider2, rider3 } = req.body;
+
+    //build rider object
+    const podiumvoteFields = {
+      user: req.user.id,
+      event: eventid,
+      date: new Date(),
+      rider1,
+      rider2,
+      rider3,
+    };
+
+    try {
+      const event = await Event.findById(eventid);
+      if (!event) {
+        return res.status(400).jsonp({ msg: 'Event not found' });
+      }
+      //validar que el usuario no haya votado ya por este stage
+      let podiumvote = await Podiumvote.findOne({
+        event: eventid,
+        user: req.user.id,
+      });
+      if (podiumvote) {
+        //Update
+        podiumvote = await Podiumvote.findOneAndUpdate(
+          {
+            event: eventid,
+            user: req.user.id,
+          },
+          { $set: podiumvoteFields },
+          { new: true }
+        );
+        return res.json(podiumvote);
+      }
+
+      podiumvote = new Podiumvote(podiumvoteFields);
+      await podiumvote.save();
+
+      res.json({
+        podiumvote,
+      });
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server Error');
