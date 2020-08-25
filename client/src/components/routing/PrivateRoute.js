@@ -14,7 +14,7 @@ const PrivateRoute = ({
       !isAuthenticated && !loading ? (
         <Redirect to='/' />
       ) : (
-        <Component {...props} />
+        <Component {...props} {...rest} />
       )
     }
   />

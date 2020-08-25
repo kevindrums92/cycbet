@@ -1,3 +1,4 @@
+@import '~bootstrap/scss/bootstrap';
 /* Global Styles */
 :root {
   --primary-color: #17a2b8;
@@ -30,7 +31,7 @@ body {
 
 a {
   color: var(--primary-color);
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 ul {
@@ -40,12 +41,32 @@ ul {
 img {
   width: 100%;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+ol,
+ul,
+dl {
+  margin: 0;
+}
+h1,
+.h1 {
+  font-size: 1.5rem;
+}
 
 /* Utilities */
 .container {
   max-width: 1100px;
   margin: auto;
-  overflow: hidden;
   padding: 0 2rem;
   margin-top: 6rem;
   margin-bottom: 3rem;
@@ -62,6 +83,7 @@ img {
   font-size: 3rem;
   line-height: 1.2;
   margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .lead {
@@ -74,7 +96,7 @@ img {
 }
 
 .text-primary {
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 .text-dark {
@@ -178,7 +200,11 @@ img {
   background: var(--light-color);
   color: #333;
 }
-
+.bg-dark {
+  h1 {
+    font-weight: bold;
+  }
+}
 .btn-dark,
 .bg-dark,
 .badge-dark,
@@ -244,7 +270,7 @@ img {
 
 /* Forms */
 .form .form-group {
-  margin: 1.2rem 0;
+  margin: 0.5rem 0;
 }
 
 .form .form-text {
@@ -585,4 +611,13 @@ button {
   .post button {
     padding: 0.3rem 0.4rem;
   }
+}
+.trophy-gold {
+  color: #f4da05 !important;
+}
+.trophy-silver {
+  color: #dedede !important;
+}
+.trophy-copper {
+  color: #ad6e13 !important;
 }

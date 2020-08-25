@@ -8,6 +8,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  SET_LOADING,
 } from '../actions/types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -16,7 +17,9 @@ export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
-
+  dispatch({
+    type: SET_LOADING,
+  });
   try {
     const res = await axios.get('/api/auth');
 
@@ -49,10 +52,15 @@ export const register = ({ name, email, password }) => async (dispatch) => {
     dispatch(loadUser());
   } catch (err) {
     const { data } = err.response;
-    if (data && data.errors) {
-      data.errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    if (err && err.response && err.response.data && err.response.data.errors) {
+      err.response.data.errors.forEach((error) =>
+        dispatch(setAlert(error.msg, 'danger'))
+      );
+    } else if (data.msg) {
+      dispatch(setAlert(data.msg, 'danger'));
     } else {
-      console.error(err.response);
+      console.log(err);
+      dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
     }
     dispatch({
       type: REGISTER_FAIL,
@@ -78,10 +86,15 @@ export const login = (email, password) => async (dispatch) => {
     dispatch(loadUser());
   } catch (err) {
     const { data } = err.response;
-    if (data && data.errors) {
-      data.errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
+    if (err && err.response && err.response.data && err.response.data.errors) {
+      err.response.data.errors.forEach((error) =>
+        dispatch(setAlert(error.msg, 'danger'))
+      );
+    } else if (data.msg) {
+      dispatch(setAlert(data.msg, 'danger'));
     } else {
-      console.error(err.response);
+      console.log(err);
+      dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
     }
     dispatch({
       type: LOGIN_FAIL,
