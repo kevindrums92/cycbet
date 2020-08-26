@@ -1048,7 +1048,7 @@ export default function (state = initialState, action) {
     case SET_EVENT_LOADING:
       return {
         ...state,
-        loading: true,
+        loading: payload,
       };
     case SET_EVENT_DATA:
       return {

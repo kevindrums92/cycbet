@@ -13,6 +13,21 @@ const StageSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  //flat:f, hilly:h, mountain: m
+  type: {
+    type: String,
+    required: true,
+    default: 'f',
+  },
+  distance: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  url: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = Stage = mongoose.model('Stage', StageSchema);

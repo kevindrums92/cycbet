@@ -12,6 +12,10 @@ export const joinEvent = (eventcode, history) => async (dispatch) => {
   const body = JSON.stringify({ eventcode });
 
   try {
+    dispatch({
+      type: SET_EVENT_LOADING,
+      payload: true,
+    });
     await axios.post('/api/events/registerUser', body, config);
     dispatch(setAlert('Te has unido al evento exitosamente!', 'success'));
     dispatch(loadUser());
@@ -29,6 +33,10 @@ export const joinEvent = (eventcode, history) => async (dispatch) => {
       dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
     }
   }
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: false,
+  });
 };
 
 //Get Event data
@@ -40,6 +48,7 @@ export const getDataForUser = (eventId) => async (dispatch) => {
   };
   dispatch({
     type: SET_EVENT_LOADING,
+    payload: true,
   });
   try {
     const res = await axios.get(
@@ -74,6 +83,10 @@ export const votePodium = (eventid, rider1, rider2, rider3, history) => async (
       'Content-Type': 'application/json',
     },
   };
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: true,
+  });
   const body = JSON.stringify({ eventid, rider1, rider2, rider3 });
   try {
     await axios.post('/api/events/vote', body, config);
@@ -92,6 +105,10 @@ export const votePodium = (eventid, rider1, rider2, rider3, history) => async (
       dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
     }
   }
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: false,
+  });
 };
 
 //Vote podium
@@ -106,6 +123,10 @@ export const voteStage = (stageid, rider1, rider2, rider3, history) => async (
   const body = JSON.stringify({ stageid, rider1, rider2, rider3 });
 
   try {
+    dispatch({
+      type: SET_EVENT_LOADING,
+      payload: true,
+    });
     await axios.post('/api/stages/vote', body, config);
     dispatch(setAlert('Guardado Exitosamente!', 'success'));
     history.goBack();
@@ -122,4 +143,8 @@ export const voteStage = (stageid, rider1, rider2, rider3, history) => async (
       dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
     }
   }
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: false,
+  });
 };

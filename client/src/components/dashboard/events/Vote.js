@@ -186,15 +186,20 @@ const Vote = ({
     <>
       {loading && <Spinner />}
       <form className='form' onSubmit={(e) => onSubmit(e)}>
-        {!loading && type === TYPE_PODIUM && getPodiumSection()}
-        {!loading && type === TYPE_STAGE && getStageSection()}
+        {type === TYPE_PODIUM && getPodiumSection()}
+        {type === TYPE_STAGE && getStageSection()}
         <div className='row'>
           <div className='col-md-12'>
-            <input type='submit' className='btn btn-primary' value='Guardar' />
+            <input
+              type='submit'
+              disabled={loading}
+              className='btn btn-primary'
+              value='Guardar'
+            />
             <Link
               className='btn btn-light'
               to='#!'
-              onClick={(e) => history.goBack()}
+              onClick={(e) => !loading && history.goBack()}
             >
               Volver
             </Link>
@@ -213,6 +218,7 @@ Vote.propTypes = {
   riders: PropTypes.array.isRequired,
   podiumvotes: PropTypes.array.isRequired,
   votes: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ event }) => ({

@@ -32,7 +32,7 @@ const EventVotes = ({
             <h5 className='card-title'>Podio de la carrera</h5>
             <small id='emailHelp' class='form-text text-warning'>
               Fecha límite para votar: <br />
-              <Moment format='YYYY/MM/DD HH:mm'>{event.startdate}</Moment>
+              <Moment format='YYYY/MM/DD'>{event.maxdatevotepodium}</Moment>
             </small>
             <p className='card-text'>
               {!myPodium && <>No hay votación aún!</>}
@@ -84,7 +84,7 @@ const EventVotes = ({
               <h5 className='card-title'>{stage.name}</h5>
               <small id='emailHelp' class='form-text text-warning'>
                 Fecha límite para votar: <br />
-                <Moment format='YYYY/MM/DD HH:mm'>{stage.maxdatevote}</Moment>
+                <Moment format='YYYY/MM/DD'>{stage.maxdatevote}</Moment>
               </small>
               <p className='card-text'>
                 {!myStageVote && <>No hay votación aún!</>}

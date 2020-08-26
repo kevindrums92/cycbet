@@ -18,6 +18,9 @@ router.post(
       check('eventid', 'Event id is required').not().isEmpty(),
       check('name', 'Riders date is required').not().isEmpty(),
       check('maxdatevote', 'Max date to vote is required').not().isEmpty(),
+      check('type', 'Type is required').not().isEmpty(),
+      check('type', 'Type invalid').isIn(['f', 'h', 'm']),
+      check('distance', 'Distance is required').not().isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -25,13 +28,16 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { eventid, name, maxdatevote } = req.body;
+    const { eventid, name, maxdatevote, type, distance, url } = req.body;
 
     //build rider object
     const stageFields = {
       name,
       maxdatevote,
       event: eventid,
+      type,
+      distance,
+      url,
     };
 
     try {

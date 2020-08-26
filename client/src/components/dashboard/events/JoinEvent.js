@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { joinEvent } from '../../../actions/event';
+import Spinner from '../../layout/Spinner';
 
-const JoinEvent = ({ history, joinEvent }) => {
+const JoinEvent = ({ history, joinEvent, loading }) => {
   const [formData, setFormData] = useState({
     eventcode: '',
   });
@@ -20,6 +21,7 @@ const JoinEvent = ({ history, joinEvent }) => {
   };
   return (
     <>
+      {loading && <Spinner />}
       <h1 className='large text-primary'>Unirse a un evento</h1>
       <p className='lead'>
         <i className='fas fa-terminal'></i> Únete y empieza a realizar tus
@@ -38,7 +40,11 @@ const JoinEvent = ({ history, joinEvent }) => {
           />
         </div>
 
-        <button type='submit' className='btn btn-primary my-1'>
+        <button
+          type='submit'
+          disabled={loading}
+          className='btn btn-primary my-1'
+        >
           Unirse
         </button>
         <Link
@@ -56,6 +62,11 @@ const JoinEvent = ({ history, joinEvent }) => {
 JoinEvent.propTypes = {
   history: PropTypes.object.isRequired,
   joinEvent: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
-export default connect(null, { joinEvent })(JoinEvent);
+const mapStateToProps = ({ event }) => ({
+  loading: event.loading,
+});
+
+export default connect(mapStateToProps, { joinEvent })(JoinEvent);

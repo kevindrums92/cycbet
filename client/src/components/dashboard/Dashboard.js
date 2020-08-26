@@ -25,9 +25,9 @@ const Dashboard = ({ auth }) => {
             <i className='fas fa-hand-pointer text-primary'></i> Unirse a un
             evento
           </Link>
-          <a href='add-experience.html' className='btn btn-light'>
+          {/* <a href='add-experience.html' className='btn btn-light'>
             <i className='fas fa-plus-square text-primary'></i> Crear un evento
-          </a>
+          </a> */}
         </div>
       )}
 

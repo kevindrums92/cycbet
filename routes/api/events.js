@@ -25,6 +25,9 @@ router.post(
       check('name', 'Name is required').not().isEmpty(),
       check('startdate', 'Start date is required').not().isEmpty(),
       check('code', 'Code is required').not().isEmpty(),
+      check('maxdatevotepodium', 'Max date to vote podium is required')
+        .not()
+        .isEmpty(),
     ],
   ],
   async (req, res) => {
@@ -33,7 +36,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, startdate, code } = req.body;
+    const { name, startdate, code, maxdatevotepodium } = req.body;
 
     //build event object
     const eventFields = {};
@@ -41,7 +44,14 @@ router.post(
     eventFields.name = name;
     eventFields.startdate = startdate;
     eventFields.code = code;
+    eventFields.maxdatevotepodium = maxdatevotepodium;
     try {
+      const eventSameCode = await Event.findOne({ code: code });
+      if (eventSameCode) {
+        return res
+          .status(400)
+          .jsonp({ msg: 'There is an event created with this code' });
+      }
       //Create
       const event = new Event(eventFields);
 
