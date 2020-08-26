@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const PodiumresultSchema = new mongoose.Schema({
-  user: {
+  event: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Event',
   },
   date: {
     type: Date,

@@ -249,4 +249,67 @@ router.post(
   }
 );
 
+// @route POST api/events/setPodiumResult
+// @desc insert podium result
+// @access Private
+router.post(
+  '/setPodiumResult',
+  [
+    auth,
+    [
+      check('eventid', 'Event id is required').not().isEmpty(),
+      check('rider1', 'Rider 1 is required').not().isEmpty(),
+      check('rider2', 'Rider 2 is required').not().isEmpty(),
+      check('rider3', 'Rider 3 is required').not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { eventid, rider1, rider2, rider3 } = req.body;
+
+    //build object
+    const podiumresFields = {
+      event: eventid,
+      rider1,
+      rider2,
+      rider3,
+    };
+
+    try {
+      const event = await Event.findById(eventid);
+      if (!event) {
+        return res.status(400).jsonp({ msg: 'Event not found' });
+      }
+      //validar que el usuario no haya votado ya por este stage
+      let podiumres = await Podiumresult.findOne({
+        event: eventid,
+      });
+      if (podiumres) {
+        //Update
+        podiumres = await Podiumresult.findOneAndUpdate(
+          {
+            event: eventid,
+          },
+          { $set: podiumresFields },
+          { new: true }
+        );
+        return res.json(podiumres);
+      }
+
+      podiumres = new Podiumresult(podiumresFields);
+      await podiumres.save();
+
+      res.json({
+        podiumres,
+      });
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
 module.exports = router;
