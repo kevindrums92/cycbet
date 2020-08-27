@@ -57,23 +57,17 @@ router.get('/:event_id', [auth], async (req, res) => {
 
     const stageResults = await Stageresult.find({
       event: event_id,
-    }).populate(ridersPopulateObject);
+    });
 
-    const podiumResults = await Podiumresult.find({ event: event_id }).populate(
-      ridersPopulateObject
-    );
+    const podiumResults = await Podiumresult.find({ event: event_id });
     const ranking = [];
     for (let index = 0; index < eventUsers.length; index++) {
       const { user } = eventUsers[index];
-      const votes = await Vote.find({ user: user.id }).populate(
-        ridersPopulateObject
-      );
+      const votes = await Vote.find({ user: user.id });
 
-      const podiumvotes = await Podiumvote.find({ user: user.id }).populate(
-        ridersPopulateObject
-      );
+      const podiumvotes = await Podiumvote.find({ user: user.id });
 
-      const totalPoints = getUserTotalPoints(
+      const { points: totalPoints, assertions } = getUserTotalPoints(
         votes,
         podiumvotes,
         stageResults,
@@ -84,10 +78,16 @@ router.get('/:event_id', [auth], async (req, res) => {
       ranking.push({
         user,
         totalPoints,
+        assertions,
       });
     }
+    ranking.sort((a, b) => {
+      if (a.totalPoints < b.totalPoints) return 1;
+      if (b.totalPoints > a.totalPoints) return -1;
+      return 0;
+    });
 
-    res.json(ranking);
+    res.json({ event, ranking });
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');

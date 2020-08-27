@@ -180,7 +180,7 @@ router.get('/getDataForUser/:event_id', [auth], async (req, res) => {
       ridersPopulateObject
     );
 
-    const totalPoints = getUserTotalPoints(
+    const { points: totalPoints } = getUserTotalPoints(
       votes,
       podiumvotes,
       stageResults,

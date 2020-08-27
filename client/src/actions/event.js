@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import { loadUser } from './auth';
-import { SET_EVENT_DATA, SET_EVENT_LOADING } from '../actions/types';
+import {
+  SET_EVENT_DATA,
+  SET_EVENT_LOADING,
+  SET_RANKING_DATA,
+} from '../actions/types';
 //Join to an event
 export const joinEvent = (eventcode, history) => async (dispatch) => {
   const config = {
@@ -37,6 +41,38 @@ export const joinEvent = (eventcode, history) => async (dispatch) => {
     type: SET_EVENT_LOADING,
     payload: false,
   });
+};
+
+//getRankingbyEvent
+export const getRankingbyEvent = (eventId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: true,
+  });
+  try {
+    const res = await axios.get(`/api/ranking/${eventId}`, config);
+    dispatch({
+      type: SET_RANKING_DATA,
+      payload: res.data,
+    });
+  } catch (err) {
+    const { data } = err.response;
+    if (err && err.response && err.response.data && err.response.data.errors) {
+      err.response.data.errors.forEach((error) =>
+        dispatch(setAlert(error.msg, 'danger'))
+      );
+    } else if (data.msg) {
+      dispatch(setAlert(data.msg, 'danger'));
+    } else {
+      console.log(err);
+      dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
+    }
+  }
 };
 
 //Get Event data

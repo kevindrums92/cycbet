@@ -10,3 +10,4 @@ export const LOGOUT = 'LOGOUT';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_EVENT_LOADING = 'SET_EVENT_LOADING';
 export const SET_EVENT_DATA = 'SET_EVENT_DATA';
+export const SET_RANKING_DATA = 'SET_RANKING_DATA';

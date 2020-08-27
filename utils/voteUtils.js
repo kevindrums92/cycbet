@@ -6,6 +6,7 @@ const getUserTotalPoints = (
   eventId
 ) => {
   let points = 0;
+  let assertions = 0;
 
   const podiumResult = podiumResults.find(
     (e) => e.event.toString() === eventId.toString()
@@ -20,18 +21,21 @@ const getUserTotalPoints = (
       ) {
         //sumo 200pts si acerté el ganador
         points += 200;
+        assertions++;
       }
       if (
         podiumVote.rider2._id.toString() === podiumResult.rider2._id.toString()
       ) {
         //sumo 100pts si acerté el subcampeón
         points += 100;
+        assertions++;
       }
       if (
         podiumVote.rider3._id.toString() === podiumResult.rider3._id.toString()
       ) {
         //sumo 90pts si acerté el tercero
         points += 90;
+        assertions++;
       }
     }
   }
@@ -69,9 +73,10 @@ const getUserTotalPoints = (
     ).length;
     //acumulado de puntos por etapas
     points += assertsRider1 * 50 + assertsRider2 * 20 + assertsRider3 * 10;
+    assertions += assertsRider1 + assertsRider2 + assertsRider3;
   }
 
-  return points;
+  return { points, assertions };
 };
 
 module.exports.getUserTotalPoints = getUserTotalPoints;
