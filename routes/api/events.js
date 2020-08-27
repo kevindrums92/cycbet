@@ -13,6 +13,9 @@ const Stageresult = require('../../models/Stageresult');
 const Podiumresult = require('../../models/Podiumresult');
 
 const Eventusers = require('../../models/Eventusers');
+const { findOneAndUpdate } = require('../../models/Stage');
+
+const { getUserTotalPoints } = require('../../utils/voteUtils');
 
 // @route POST api/event
 // @desc Create or update event
@@ -36,8 +39,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, startdate, code, maxdatevotepodium } = req.body;
-
+    const { name, startdate, code, maxdatevotepodium, id } = req.body;
     //build event object
     const eventFields = {};
     eventFields.creator = req.user.id;
@@ -46,17 +48,31 @@ router.post(
     eventFields.code = code;
     eventFields.maxdatevotepodium = maxdatevotepodium;
     try {
-      const eventSameCode = await Event.findOne({ code: code });
-      if (eventSameCode) {
-        return res
-          .status(400)
-          .jsonp({ msg: 'There is an event created with this code' });
-      }
       //Create
-      const event = new Event(eventFields);
+      let event;
+      if (id) {
+        event = await Event.findById(id);
+        if (!event) {
+          return res.status(400).jsonp({ msg: 'Event not found' });
+        }
+        event = await Event.findOneAndUpdate(
+          { _id: id },
+          { $set: eventFields },
+          { new: true }
+        );
+        res.json(event);
+      } else {
+        const eventSameCode = await Event.findOne({ code: code });
+        if (eventSameCode) {
+          return res
+            .status(400)
+            .jsonp({ msg: 'There is an event created with this code' });
+        }
+        event = new Event(eventFields);
 
-      await event.save();
-      res.json(event);
+        await event.save();
+        res.json(event);
+      }
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server Error');
@@ -164,6 +180,14 @@ router.get('/getDataForUser/:event_id', [auth], async (req, res) => {
       ridersPopulateObject
     );
 
+    const totalPoints = getUserTotalPoints(
+      votes,
+      podiumvotes,
+      stageResults,
+      podiumResults,
+      event_id
+    );
+
     res.json({
       event,
       riders,
@@ -172,6 +196,7 @@ router.get('/getDataForUser/:event_id', [auth], async (req, res) => {
       podiumvotes,
       stageResults,
       podiumResults,
+      totalPoints,
     });
   } catch (err) {
     if (err instanceof mongoose.CastError) {

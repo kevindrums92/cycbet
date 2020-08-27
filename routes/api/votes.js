@@ -4,6 +4,7 @@ const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
 const Podiumvote = require('../../models/Podiumvote');
+const Event = require('../../models/Event');
 
 // @route POST api/votes/podium
 // @desc register vote for podium
@@ -35,6 +36,27 @@ router.post(
     podiumvoteFields.rider3 = rider3;
     podiumvoteFields.date = new Date();
     try {
+      const event = await Event.findById(eventid);
+      if (!event) {
+        return res.status(400).jsonp({
+          msg: `Event not found`,
+        });
+      }
+
+      console.log(new Date(event.maxdatevotepodium));
+      //Validar que este en el rango de fecha para votar
+      const maxdatevote = new Date(event.maxdatevotepodium)
+        .addDays(1)
+        .getTime();
+      const currentDate = new Date().getTime();
+      if (currentDate > maxdatevote) {
+        return res.status(400).jsonp({
+          msg: `Max date to vote was ${new Date(
+            event.maxdatevotepodium
+          ).toString()}`,
+        });
+      }
+
       let podiumvote = new Podiumvote(podiumvoteFields);
       podiumvote.save();
 

@@ -95,6 +95,18 @@ router.post(
       if (!stage) {
         return res.status(400).jsonp({ msg: 'Stage not found' });
       }
+      //Validar que este en el rango de fecha para votar
+      const maxdatevote = new Date(stage.maxdatevote).addDays(1).getTime();
+      const currentDate = new Date().getTime();
+      if (currentDate > maxdatevote) {
+        return res
+          .status(400)
+          .jsonp({
+            msg: `Max date to vote was ${new Date(
+              stage.maxdatevote
+            ).toString()}`,
+          });
+      }
       //validar que el usuario no haya votado ya por este stage
       let vote = await Vote.findOne({ stage: stageid, user: req.user.id });
       if (vote) {

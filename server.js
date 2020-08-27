@@ -2,6 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
 const app = express();
+require('./utils/dateUtils.js');
 //Connect DB
 connectDB();
 
@@ -17,6 +18,7 @@ app.use('/api/events', require('./routes/api/events'));
 app.use('/api/riders', require('./routes/api/riders'));
 app.use('/api/votes', require('./routes/api/votes'));
 app.use('/api/stages', require('./routes/api/stages'));
+app.use('/api/ranking', require('./routes/api/ranking'));
 
 //Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
