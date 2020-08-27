@@ -17,6 +17,7 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import JoinEvent from './components/dashboard/events/JoinEvent';
 import EventVotes from './components/dashboard/events/EventVotes';
 import Vote from './components/dashboard/events/Vote';
+import Ranking from './components/dashboard/events/Ranking';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -51,6 +52,11 @@ const App = () => {
                 exact
                 path='/eventvotes/:eventId'
                 component={EventVotes}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path='/ranking/:eventId'
+                component={Ranking}
               ></PrivateRoute>
               <PrivateRoute
                 exact

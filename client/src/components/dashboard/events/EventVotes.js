@@ -207,9 +207,6 @@ const EventVotes = ({
       <Link className='btn btn-light' to='#!' onClick={(e) => history.goBack()}>
         <i className='fas fa-arrow-left'></i> Volver
       </Link>
-      <Link className='btn btn-light' to='#!' onClick={(e) => history.goBack()}>
-        <i className='fas fa-list text-primary'></i> Ver Ranking
-      </Link>
       <br />
       {loading && <Spinner />}
       {!loading && (

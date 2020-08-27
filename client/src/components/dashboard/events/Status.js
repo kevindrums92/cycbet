@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-const Status = ({ user, totalPoints }) => {
+const Status = ({ user, totalPoints, event }) => {
   if (!user) return <></>;
   return (
     <div className='profiles'>
@@ -11,8 +12,10 @@ const Status = ({ user, totalPoints }) => {
         <div>
           <h2>{user.name}</h2>
           <p>{user.email}</p>
-          <p>Posición en el Ranking: --</p>
           <p>Puntos: {totalPoints}</p>
+          <Link className='btn btn-primary' to={`/ranking/${event._id}`}>
+            <i className='fas fa-list'></i> Ver Ranking
+          </Link>
         </div>
 
         {/* <ul>
@@ -40,6 +43,7 @@ const Status = ({ user, totalPoints }) => {
 Status.propTypes = {
   user: PropTypes.object,
   totalPoints: PropTypes.number.isRequired,
+  event: PropTypes.object.isRequired,
 };
 
 Status.defaultProps = {
@@ -49,6 +53,7 @@ Status.defaultProps = {
 const mapStateToProps = ({ auth, event }) => ({
   user: auth.user,
   totalPoints: event.totalPoints,
+  event: event.event,
 });
 
 export default connect(mapStateToProps)(Status);
