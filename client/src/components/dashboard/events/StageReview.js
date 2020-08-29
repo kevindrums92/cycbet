@@ -56,7 +56,7 @@ const getTableSection = (eventUsers, votes, stageResult) => {
             if (assert2) pts += 20;
             if (assert3) pts += 10;
             return (
-              <tr>
+              <tr key={user.user._id}>
                 <td>
                   <img
                     className='round-img ranking-user-img mr-2 hide-sm'
@@ -164,11 +164,18 @@ const StageReview = ({
 StageReview.propTypes = {
   history: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  event: PropTypes.object.isRequired,
-  stageResult: PropTypes.object.isRequired,
-  votes: PropTypes.array.isRequired,
-  eventUsers: PropTypes.array.isRequired,
-  stage: PropTypes.object.isRequired,
+  event: PropTypes.object,
+  stageResult: PropTypes.array,
+  votes: PropTypes.array,
+  eventUsers: PropTypes.array,
+  stage: PropTypes.object,
+};
+StageReview.defaultProps = {
+  event: null,
+  stageResult: null,
+  votes: null,
+  eventUsers: null,
+  stage: null,
 };
 
 const mapStateToProps = ({ stage }) => ({
