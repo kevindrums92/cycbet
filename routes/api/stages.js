@@ -99,13 +99,9 @@ router.post(
       const maxdatevote = new Date(stage.maxdatevote).addDays(1).getTime();
       const currentDate = new Date().getTime();
       if (currentDate > maxdatevote) {
-        return res
-          .status(400)
-          .jsonp({
-            msg: `Max date to vote was ${new Date(
-              stage.maxdatevote
-            ).toString()}`,
-          });
+        return res.status(400).jsonp({
+          msg: `Max date to vote was ${new Date(stage.maxdatevote).toString()}`,
+        });
       }
       //validar que el usuario no haya votado ya por este stage
       let vote = await Vote.findOne({ stage: stageid, user: req.user.id });
@@ -192,5 +188,81 @@ router.post(
     }
   }
 );
+
+// @route GET api/stages/getListVotes:stage_id
+// @desc get list of people votes by stage id
+// @access Private
+router.get('/getListVotes/:stage_id', [auth], async (req, res) => {
+  try {
+    const { stage_id } = req.params;
+
+    const stage = await Stage.findById(stage_id);
+    if (!stage) {
+      return res.status(400).jsonp({ msg: 'Stage not found' });
+    }
+
+    const event = await Event.findById(stage.event).populate([
+      {
+        path: 'creator',
+        model: 'User',
+        select: 'name avatar',
+      },
+    ]);
+    if (!event) {
+      return res.status(400).jsonp({ msg: 'Event not found' });
+    }
+
+    const stageResult = await Stageresult.find({ stage: stage_id }).populate([
+      {
+        path: 'rider1',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider2',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider3',
+        model: 'Rider',
+        select: 'name',
+      },
+    ]);
+    const votes = await Vote.find({ stage: stage_id }).populate([
+      {
+        path: 'rider1',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider2',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider3',
+        model: 'Rider',
+        select: 'name',
+      },
+    ]);
+
+    const eventUsers = await Eventusers.find({
+      event: stage.event,
+    }).populate([
+      {
+        path: 'user',
+        model: 'User',
+        select: 'name avatar',
+      },
+    ]);
+    eventUsers.push({ user: event.creator });
+
+    res.json({ stage, event, stageResult, votes, eventUsers });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

@@ -17,6 +17,41 @@ const { findOneAndUpdate } = require('../../models/Stage');
 
 const { getUserTotalPoints } = require('../../utils/voteUtils');
 
+// @route GET api/events/:event_id
+// @desc get Event by id
+// @access Private
+router.get('/:event_id', [auth], async (req, res) => {
+  try {
+    const { event_id } = req.params;
+    const event = await Event.findById(event_id).populate([
+      {
+        path: 'creator',
+        model: 'User',
+        select: 'name avatar',
+      },
+    ]);
+    if (!event) {
+      return res.status(400).jsonp({ msg: 'Event not found' });
+    }
+
+    //List Stages
+    const stages = await Stage.find({ event: event_id });
+    //List Stages results
+    const stagesResults = await Stageresult.find({ event: event_id });
+
+    //get podium result
+    const podiumResult = await Podiumresult.find({ event: event_id });
+
+    //list riders
+    const riders = await Rider.find({ event: event_id });
+
+    res.json({ event, stages, stagesResults, podiumResult, riders });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route POST api/event
 // @desc Create or update event
 // @access Private

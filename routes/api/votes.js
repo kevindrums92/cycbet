@@ -43,7 +43,6 @@ router.post(
         });
       }
 
-      console.log(new Date(event.maxdatevotepodium));
       //Validar que este en el rango de fecha para votar
       const maxdatevote = new Date(event.maxdatevotepodium)
         .addDays(1)

@@ -58,11 +58,11 @@ const EventVotes = ({
                       <i className='fas fa-trophy trophy-gold'></i>{' '}
                       {myPodium.rider1.name}{' '}
                       {podiumResult && !assertRider1 && (
-                        <i class='fas fa-times-circle text-danger'></i>
+                        <i className='fas fa-times-circle text-danger'></i>
                       )}
                       {podiumResult && assertRider1 && (
                         <span className='text-success'>
-                          <i class='fas fa-check-circle text-success'></i>{' '}
+                          <i className='fas fa-check-circle text-success'></i>{' '}
                           200pts
                         </span>
                       )}
@@ -71,11 +71,11 @@ const EventVotes = ({
                       <i className='fas fa-trophy trophy-silver'></i>{' '}
                       {myPodium.rider2.name}{' '}
                       {podiumResult && !assertRider2 && (
-                        <i class='fas fa-times-circle text-danger'></i>
+                        <i className='fas fa-times-circle text-danger'></i>
                       )}
                       {podiumResult && assertRider2 && (
                         <span className='text-success'>
-                          <i class='fas fa-check-circle text-success'></i>{' '}
+                          <i className='fas fa-check-circle text-success'></i>{' '}
                           100pts
                         </span>
                       )}
@@ -84,11 +84,12 @@ const EventVotes = ({
                       <i className='fas fa-trophy trophy-copper'></i>{' '}
                       {myPodium.rider3.name}{' '}
                       {podiumResult && !assertRider3 && (
-                        <i class='fas fa-times-circle text-danger'></i>
+                        <i className='fas fa-times-circle text-danger'></i>
                       )}
                       {podiumResult && assertRider3 && (
                         <span className='text-success'>
-                          <i class='fas fa-check-circle success-dark'></i> 90pts
+                          <i className='fas fa-check-circle success-dark'></i>{' '}
+                          90pts
                         </span>
                       )}
                     </div>
@@ -133,6 +134,10 @@ const EventVotes = ({
         myStageVote &&
         myStageVote.rider3._id === stageResult.rider3._id;
 
+      //Validar que este en el rango de fecha para votar
+      const maxdatevote = new Date(stage.maxdatevote).addDays(1).getTime();
+      const currentDate = new Date().getTime();
+      const dateToVotePassed = currentDate > maxdatevote;
       return (
         <div className='col-md-4 mb-3' key={stage._id}>
           <div className='card text-white bg-info'>
@@ -149,40 +154,43 @@ const EventVotes = ({
                     <div className='col-md-12'>
                       1°: {myStageVote.rider1.name}{' '}
                       {stageResult && !assertRider1 && (
-                        <i class='fas fa-times-circle text-danger'></i>
+                        <i className='fas fa-times-circle text-danger'></i>
                       )}
                       {stageResult && assertRider1 && (
                         <span className='success-dark'>
-                          <i class='fas fa-check-circle success-dark'></i> 50pts
+                          <i className='fas fa-check-circle success-dark'></i>{' '}
+                          50pts
                         </span>
                       )}
                     </div>
                     <div className='col-md-12'>
                       2°: {myStageVote.rider2.name}{' '}
                       {stageResult && !assertRider2 && (
-                        <i class='fas fa-times-circle text-danger'></i>
+                        <i className='fas fa-times-circle text-danger'></i>
                       )}
                       {stageResult && assertRider2 && (
                         <span className='success-dark'>
-                          <i class='fas fa-check-circle success-dark'></i> 20pts
+                          <i className='fas fa-check-circle success-dark'></i>{' '}
+                          20pts
                         </span>
                       )}
                     </div>
                     <div className='col-md-12'>
                       3°: {myStageVote.rider3.name}{' '}
                       {stageResult && !assertRider3 && (
-                        <i class='fas fa-times-circle text-danger'></i>
+                        <i className='fas fa-times-circle text-danger'></i>
                       )}
                       {stageResult && assertRider3 && (
                         <span className='success-dark'>
-                          <i class='fas fa-check-circle success-dark'></i> 10pts
+                          <i className='fas fa-check-circle success-dark'></i>{' '}
+                          10pts
                         </span>
                       )}
                     </div>
                   </div>
                 )}
               </div>
-              {!stageResult && (
+              {!dateToVotePassed && (
                 <Link className='btn btn-dark' to={`/stagevote/${stage._id}`}>
                   {!myStageVote && (
                     <>
@@ -194,6 +202,11 @@ const EventVotes = ({
                       <i className='fas fa-edit'></i> Editar
                     </>
                   )}
+                </Link>
+              )}
+              {dateToVotePassed && (
+                <Link className='btn btn-dark' to={`/stageReview/${stage._id}`}>
+                  <i className='fas fa-eye'></i> Ver
                 </Link>
               )}
             </div>
@@ -254,3 +267,9 @@ const mapStateToProps = ({ event }) => ({
 });
 
 export default connect(mapStateToProps, { getDataForUser })(EventVotes);
+// eslint-disable-next-line no-extend-native
+Date.prototype.addDays = function (days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};

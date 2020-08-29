@@ -8,30 +8,11 @@ const Eventusers = require('../../models/Eventusers');
 const Stageresult = require('../../models/Stageresult');
 const Podiumresult = require('../../models/Podiumresult');
 
-const ridersPopulateObject = [
-  {
-    path: 'rider1',
-    model: 'Rider',
-    select: 'name',
-  },
-  {
-    path: 'rider2',
-    model: 'Rider',
-    select: 'name',
-  },
-  {
-    path: 'rider3',
-    model: 'Rider',
-    select: 'name',
-  },
-];
-
-// @route GET api/ranking/
+// @route GET api/ranking/:event_id
 // @desc get Ranking by eventId
 // @access Private
 router.get('/:event_id', [auth], async (req, res) => {
   try {
-    const { id: userId } = req.user;
     const { event_id } = req.params;
     const event = await Event.findById(event_id).populate([
       {

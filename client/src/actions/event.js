@@ -5,7 +5,76 @@ import {
   SET_EVENT_DATA,
   SET_EVENT_LOADING,
   SET_RANKING_DATA,
+  SET_STAGE_REVIEW_DATA,
 } from '../actions/types';
+
+//getListVotes
+export const getListVotes = (stageId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: true,
+  });
+  try {
+    const res = await axios.get(`/api/stages/getListVotes/${stageId}`, config);
+    dispatch({
+      type: SET_STAGE_REVIEW_DATA,
+      payload: res.data,
+    });
+  } catch (err) {
+    const { data } = err.response;
+    if (err && err.response && err.response.data && err.response.data.errors) {
+      err.response.data.errors.forEach((error) =>
+        dispatch(setAlert(error.msg, 'danger'))
+      );
+    } else if (data.msg) {
+      dispatch(setAlert(data.msg, 'danger'));
+    } else {
+      console.log(err);
+      dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
+    }
+  }
+};
+
+//Get event data for management
+export const getEventData = (eventId) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: true,
+  });
+  try {
+    const res = await axios.get(
+      `/api/events/getDataForUser/${eventId}`,
+      config
+    );
+    dispatch({
+      type: SET_EVENT_DATA,
+      payload: res.data,
+    });
+  } catch (err) {
+    const { data } = err.response;
+    if (err && err.response && err.response.data && err.response.data.errors) {
+      err.response.data.errors.forEach((error) =>
+        dispatch(setAlert(error.msg, 'danger'))
+      );
+    } else if (data.msg) {
+      dispatch(setAlert(data.msg, 'danger'));
+    } else {
+      console.log(err);
+      dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
+    }
+  }
+};
+
 //Join to an event
 export const joinEvent = (eventcode, history) => async (dispatch) => {
   const config = {

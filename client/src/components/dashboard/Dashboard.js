@@ -35,8 +35,10 @@ const Dashboard = ({ auth }) => {
         (!events || events.length === 0) &&
         (!ownEvents || ownEvents.length === 0) && (
           <>
-            <div class='alert alert-info' role='alert'>
-              <h4 class='alert-heading'>Listo para hacer tus predicciones?</h4>
+            <div className='alert alert-info' role='alert'>
+              <h4 className='alert-heading'>
+                Listo para hacer tus predicciones?
+              </h4>
               <p>
                 No tienes eventos aún, necesitas un código de evento para unirte
                 a uno!
@@ -73,14 +75,17 @@ const Dashboard = ({ auth }) => {
                       </td>
                       <td className='hide-sm'>{event.code}</td>
                       <td>
-                        <button type='button' class='btn btn-primary'>
-                          <i class='fas fa-edit'></i>
-                        </button>
+                        <Link
+                          className='btn btn-primary'
+                          to={`/manageEvent/${event._id}`}
+                        >
+                          <i className='fas fa-edit'></i>
+                        </Link>
                         <Link
                           className='btn btn-dark'
                           to={`/eventvotes/${event._id}`}
                         >
-                          <i class='fas fa-arrow-right'></i>
+                          <i className='fas fa-arrow-right'></i>
                         </Link>
                       </td>
                     </tr>
