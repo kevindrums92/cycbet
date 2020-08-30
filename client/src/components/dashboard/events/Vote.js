@@ -31,6 +31,7 @@ const Vote = ({
   voteStage,
   podiumvotes,
   votes,
+  stages,
 }) => {
   const { eventId } = useParams();
   const { stageId } = useParams();
@@ -139,9 +140,13 @@ const Vote = ({
   };
 
   const getStageSection = () => {
+    const thisStage = stages
+      ? stages.find((e) => e._id.toString() === stageId.toString())
+      : {};
+
     return (
       <>
-        <h1 className='large text-primary'>Etapa 1</h1>
+        <h1 className='large text-primary'>{thisStage.name}</h1>
         <p className='lead'>Cual es tu predicción para esta etapa?</p>
         <div className='row'>
           <div className='col-md-12'>
@@ -219,6 +224,7 @@ Vote.propTypes = {
   podiumvotes: PropTypes.array.isRequired,
   votes: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
+  stages: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = ({ event }) => ({
@@ -227,6 +233,7 @@ const mapStateToProps = ({ event }) => ({
   riders: event.riders,
   podiumvotes: event.podiumvotes,
   votes: event.votes,
+  stages: event.stages,
 });
 
 export default connect(mapStateToProps, { votePodium, voteStage })(Vote);
