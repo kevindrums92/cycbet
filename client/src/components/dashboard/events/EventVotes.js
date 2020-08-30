@@ -42,63 +42,74 @@ const EventVotes = ({
       myPodium.rider3._id === podiumResult.rider3._id;
     return (
       <div className='col-md-4 mb-3'>
-        <div className='card text-white bg-dark'>
+        <div className='card text-white'>
+          <div className='card-header votes-header text-white bg-dark'>
+            Podio de la carrera
+          </div>
           <div className='card-body'>
-            <h5 className='card-title'>Podio de la carrera</h5>
-            <small id='emailHelp' className='form-text text-warning'>
-              Fecha límite para votar: <br />
-              <Moment format='YYYY/MM/DD'>{event.maxdatevotepodium}</Moment>
-            </small>
-            <div className='card-text mb-2 mt-2'>
-              {!myPodium && <>No hay votación aún!</>}
-              {myPodium && (
-                <>
-                  <div className='row'>
-                    <div className='col-md-12'>
-                      <i className='fas fa-trophy trophy-gold'></i>{' '}
-                      {myPodium.rider1.name}{' '}
-                      {podiumResult && !assertRider1 && (
-                        <i className='fas fa-times-circle text-danger'></i>
-                      )}
-                      {podiumResult && assertRider1 && (
-                        <span className='text-success'>
-                          <i className='fas fa-check-circle text-success'></i>{' '}
-                          200pts
-                        </span>
-                      )}
-                    </div>
-                    <div className='col-md-12'>
-                      <i className='fas fa-trophy trophy-silver'></i>{' '}
-                      {myPodium.rider2.name}{' '}
-                      {podiumResult && !assertRider2 && (
-                        <i className='fas fa-times-circle text-danger'></i>
-                      )}
-                      {podiumResult && assertRider2 && (
-                        <span className='text-success'>
-                          <i className='fas fa-check-circle text-success'></i>{' '}
-                          100pts
-                        </span>
-                      )}
-                    </div>
-                    <div className='col-md-12'>
-                      <i className='fas fa-trophy trophy-copper'></i>{' '}
-                      {myPodium.rider3.name}{' '}
-                      {podiumResult && !assertRider3 && (
-                        <i className='fas fa-times-circle text-danger'></i>
-                      )}
-                      {podiumResult && assertRider3 && (
-                        <span className='text-success'>
-                          <i className='fas fa-check-circle success-dark'></i>{' '}
-                          90pts
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
+            <div className='form-group'>
+              <div className='card-field-label'>Fecha limite votación</div>
+              <div className='card-field-value'>
+                <Moment format='YYYY/MM/DD'>{event.maxdatevotepodium}</Moment>
+              </div>
             </div>
+            <div className='card-text mb-2 mt-2'>
+              <div className='card-field-label'>Mi voto</div>
+              <div className='card-field-value my-votes'>
+                {!myPodium && <>No hay votación aún!</>}
+                {myPodium && (
+                  <>
+                    <div className='row'>
+                      <div className='col-md-12'>
+                        <i className='fas fa-trophy trophy-gold'></i>{' '}
+                        {myPodium.rider1.name}{' '}
+                        {podiumResult && !assertRider1 && (
+                          <i className='fas fa-times-circle text-danger'></i>
+                        )}
+                        {podiumResult && assertRider1 && (
+                          <span className='text-success'>
+                            <i className='fas fa-check-circle text-success'></i>{' '}
+                            200pts
+                          </span>
+                        )}
+                      </div>
+                      <div className='col-md-12'>
+                        <i className='fas fa-trophy trophy-silver'></i>{' '}
+                        {myPodium.rider2.name}{' '}
+                        {podiumResult && !assertRider2 && (
+                          <i className='fas fa-times-circle text-danger'></i>
+                        )}
+                        {podiumResult && assertRider2 && (
+                          <span className='text-success'>
+                            <i className='fas fa-check-circle text-success'></i>{' '}
+                            100pts
+                          </span>
+                        )}
+                      </div>
+                      <div className='col-md-12'>
+                        <i className='fas fa-trophy trophy-copper'></i>{' '}
+                        {myPodium.rider3.name}{' '}
+                        {podiumResult && !assertRider3 && (
+                          <i className='fas fa-times-circle text-danger'></i>
+                        )}
+                        {podiumResult && assertRider3 && (
+                          <span className='text-success'>
+                            <i className='fas fa-check-circle success-dark'></i>{' '}
+                            90pts
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className='card-body'>
+            <hr />
             {!podiumResult && (
-              <Link className='btn btn-primary' to={`/podiumvote/${event._id}`}>
+              <Link className='btn btn-dark' to={`/podiumvote/${event._id}`}>
                 {!myPodium && (
                   <>
                     <i className='fas fa-arrow-right'></i> Votar
@@ -140,56 +151,66 @@ const EventVotes = ({
       const dateToVotePassed = currentDate > maxdatevote;
       return (
         <div className='col-md-4 mb-3' key={stage._id}>
-          <div className='card text-white bg-info'>
+          <div className='card'>
+            <div className='card-header votes-header text-white bg-info'>
+              {stage.name}
+            </div>
             <div className='card-body'>
-              <h5 className='card-title'>{stage.name}</h5>
-              <small id='emailHelp' className='form-text text-warning'>
-                Fecha límite para votar: <br />
-                <Moment format='YYYY/MM/DD'>{stage.maxdatevote}</Moment>
-              </small>
-              <div className='card-text mb-2 mt-2'>
-                {!myStageVote && <>No hay votación aún!</>}
-                {myStageVote && (
-                  <div className='row'>
-                    <div className='col-md-12'>
-                      1°: {myStageVote.rider1.name}{' '}
-                      {stageResult && !assertRider1 && (
-                        <i className='fas fa-times-circle text-danger'></i>
-                      )}
-                      {stageResult && assertRider1 && (
-                        <span className='success-dark'>
-                          <i className='fas fa-check-circle success-dark'></i>{' '}
-                          50pts
-                        </span>
-                      )}
-                    </div>
-                    <div className='col-md-12'>
-                      2°: {myStageVote.rider2.name}{' '}
-                      {stageResult && !assertRider2 && (
-                        <i className='fas fa-times-circle text-danger'></i>
-                      )}
-                      {stageResult && assertRider2 && (
-                        <span className='success-dark'>
-                          <i className='fas fa-check-circle success-dark'></i>{' '}
-                          20pts
-                        </span>
-                      )}
-                    </div>
-                    <div className='col-md-12'>
-                      3°: {myStageVote.rider3.name}{' '}
-                      {stageResult && !assertRider3 && (
-                        <i className='fas fa-times-circle text-danger'></i>
-                      )}
-                      {stageResult && assertRider3 && (
-                        <span className='success-dark'>
-                          <i className='fas fa-check-circle success-dark'></i>{' '}
-                          10pts
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )}
+              <div className='form-group'>
+                <div className='card-field-label'>Fecha limite votación</div>
+                <div className='card-field-value'>
+                  <Moment format='YYYY/MM/DD'>{stage.maxdatevote}</Moment>
+                </div>
               </div>
+              <div className='card-text mb-2 mt-2'>
+                <div className='card-field-label'>Mi voto</div>
+                <div className='card-field-value my-votes'>
+                  {!myStageVote && <>No hay votación aún!</>}
+                  {myStageVote && (
+                    <div className='row'>
+                      <div className='col-md-12'>
+                        1°: {myStageVote.rider1.name}{' '}
+                        {stageResult && !assertRider1 && (
+                          <i className='fas fa-times-circle text-danger'></i>
+                        )}
+                        {stageResult && assertRider1 && (
+                          <span className='success-dark'>
+                            <i className='fas fa-check-circle success-dark'></i>{' '}
+                            50pts
+                          </span>
+                        )}
+                      </div>
+                      <div className='col-md-12'>
+                        2°: {myStageVote.rider2.name}{' '}
+                        {stageResult && !assertRider2 && (
+                          <i className='fas fa-times-circle text-danger'></i>
+                        )}
+                        {stageResult && assertRider2 && (
+                          <span className='success-dark'>
+                            <i className='fas fa-check-circle success-dark'></i>{' '}
+                            20pts
+                          </span>
+                        )}
+                      </div>
+                      <div className='col-md-12'>
+                        3°: {myStageVote.rider3.name}{' '}
+                        {stageResult && !assertRider3 && (
+                          <i className='fas fa-times-circle text-danger'></i>
+                        )}
+                        {stageResult && assertRider3 && (
+                          <span className='success-dark'>
+                            <i className='fas fa-check-circle success-dark'></i>{' '}
+                            10pts
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className='card-body'>
+              <hr />
               {!dateToVotePassed && (
                 <Link className='btn btn-dark' to={`/stagevote/${stage._id}`}>
                   {!myStageVote && (
@@ -205,7 +226,10 @@ const EventVotes = ({
                 </Link>
               )}
               {dateToVotePassed && (
-                <Link className='btn btn-dark' to={`/stageReview/${stage._id}`}>
+                <Link
+                  className='btn btn-primary'
+                  to={`/stageReview/${stage._id}`}
+                >
                   <i className='fas fa-eye'></i> Ver
                 </Link>
               )}
