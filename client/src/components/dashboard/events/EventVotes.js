@@ -212,7 +212,10 @@ const EventVotes = ({
             <div className='card-body'>
               <hr />
               {!dateToVotePassed && (
-                <Link className='btn btn-dark' to={`/stagevote/${stage._id}`}>
+                <Link
+                  className='btn btn-primary'
+                  to={`/stagevote/${stage._id}`}
+                >
                   {!myStageVote && (
                     <>
                       <i className='fas fa-arrow-right'></i> Votar
