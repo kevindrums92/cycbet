@@ -62,11 +62,7 @@ router.get('/:event_id', [auth], async (req, res) => {
         assertions,
       });
     }
-    ranking.sort((a, b) => {
-      if (a.totalPoints < b.totalPoints) return 1;
-      if (b.totalPoints > a.totalPoints) return -1;
-      return 0;
-    });
+    ranking.sort((a, b) => b.totalPoints - a.totalPoints);
 
     res.json({ event, ranking });
   } catch (err) {
