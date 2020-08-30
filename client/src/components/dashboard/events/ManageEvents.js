@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getEventData } from '../../../actions/event';
 import { useEffect } from 'react';
@@ -30,9 +30,9 @@ const ManageEvents = ({ getEventData, history }) => {
 
   return (
     <>
-      <Link className='btn btn-light' to='#!' onClick={(e) => history.goBack()}>
+      <button className='btn btn-light' onClick={(e) => history.goBack()}>
         <i className='fas fa-arrow-left'></i> Volver
-      </Link>
+      </button>
       <h1 className='large text-primary'>Edición del evento</h1>
       <form className='form' onSubmit={(e) => onSubmit(e)}>
         <div className='row'>

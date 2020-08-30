@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useParams, Link, Redirect } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { votePodium, voteStage } from '../../../actions/event';
 import Spinner from '../../layout/Spinner';
@@ -196,13 +196,13 @@ const Vote = ({
               className='btn btn-primary'
               value='Guardar'
             />
-            <Link
+            <button
+              type='button'
               className='btn btn-light'
-              to='#!'
               onClick={(e) => !loading && history.goBack()}
             >
               Volver
-            </Link>
+            </button>
           </div>
         </div>
       </form>

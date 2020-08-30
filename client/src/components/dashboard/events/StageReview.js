@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getListVotes } from '../../../actions/event';
 import { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Spinner from '../../layout/Spinner';
 
 const getHeaderSection = (stage, stageResult) => {
@@ -143,9 +143,13 @@ const StageReview = ({
 
   return (
     <>
-      <Link className='btn btn-light' to='#!' onClick={(e) => history.goBack()}>
+      <button
+        className='btn btn-light'
+        type='button'
+        onClick={(e) => history.goBack()}
+      >
         <i className='fas fa-arrow-left'></i> Volver
-      </Link>
+      </button>
       <br />
       {loading && <Spinner />}
       {!loading && (

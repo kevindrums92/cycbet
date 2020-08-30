@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../../layout/Spinner';
 import { getRankingbyEvent } from '../../../actions/event';
@@ -15,9 +15,13 @@ const Ranking = ({ history, loading, event, getRankingbyEvent, ranking }) => {
 
   return (
     <>
-      <Link className='btn btn-light' to='#!' onClick={(e) => history.goBack()}>
+      <button
+        type='button'
+        className='btn btn-light'
+        onClick={(e) => history.goBack()}
+      >
         <i className='fas fa-arrow-left'></i> Volver
-      </Link>
+      </button>
       <br />
       {loading && <Spinner />}
       <h1 className='large text-primary'>{event.name}</h1>

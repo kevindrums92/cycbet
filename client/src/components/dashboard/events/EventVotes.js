@@ -217,9 +217,13 @@ const EventVotes = ({
 
   return (
     <>
-      <Link className='btn btn-light' to='#!' onClick={(e) => history.goBack()}>
+      <button
+        className='btn btn-light'
+        type='button'
+        onClick={(e) => history.goBack()}
+      >
         <i className='fas fa-arrow-left'></i> Volver
-      </Link>
+      </button>
       <br />
       {loading && <Spinner />}
       {!loading && (

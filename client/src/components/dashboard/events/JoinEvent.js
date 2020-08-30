@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { joinEvent } from '../../../actions/event';
 import Spinner from '../../layout/Spinner';
 
@@ -47,13 +46,13 @@ const JoinEvent = ({ history, joinEvent, loading }) => {
         >
           Unirse
         </button>
-        <Link
+        <button
+          type='button'
           className='btn btn-light my-1'
-          to='#!'
           onClick={(e) => history.goBack()}
         >
           Volver
-        </Link>
+        </button>
       </form>
     </>
   );
