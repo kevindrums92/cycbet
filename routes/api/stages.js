@@ -96,7 +96,7 @@ router.post(
         return res.status(400).jsonp({ msg: 'Stage not found' });
       }
       //Validar que este en el rango de fecha para votar
-      const maxdatevote = new Date(stage.maxdatevote).addDays(1).getTime();
+      const maxdatevote = new Date(stage.maxdatevote).getTime();
       const currentDate = new Date().getTime();
       if (currentDate > maxdatevote) {
         return res.status(400).jsonp({

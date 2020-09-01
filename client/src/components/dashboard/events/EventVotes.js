@@ -146,7 +146,7 @@ const EventVotes = ({
         myStageVote.rider3._id === stageResult.rider3._id;
 
       //Validar que este en el rango de fecha para votar
-      const maxdatevote = new Date(stage.maxdatevote).addDays(1).getTime();
+      const maxdatevote = new Date(stage.maxdatevote).getTime();
       const currentDate = new Date().getTime();
       const dateToVotePassed = currentDate > maxdatevote;
       return (
@@ -159,7 +159,7 @@ const EventVotes = ({
               <div className='form-group'>
                 <div className='card-field-label'>Fecha limite votación</div>
                 <div className='card-field-value'>
-                  <Moment format='YYYY/MM/DD'>{stage.maxdatevote}</Moment>
+                  <Moment format='YYYY/MM/DD HH:mm'>{stage.maxdatevote}</Moment>
                 </div>
               </div>
               <div className='card-text mb-2 mt-2'>
