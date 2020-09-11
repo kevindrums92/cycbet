@@ -7,6 +7,8 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Alert from './components/layout/Alert';
 import './App.scss';
+import 'react-datepicker/dist/react-datepicker.css';
+
 //Redux
 import { Provider } from 'react-redux';
 import store from './store';
@@ -18,7 +20,7 @@ import JoinEvent from './components/dashboard/events/JoinEvent';
 import EventVotes from './components/dashboard/events/EventVotes';
 import Vote from './components/dashboard/events/Vote';
 import Ranking from './components/dashboard/events/Ranking';
-import ManageEvents from './components/dashboard/events/ManageEvents';
+import ManageEvents from './components/dashboard/events/manage/ManageEvents';
 import StageReview from './components/dashboard/events/StageReview';
 
 if (localStorage.token) {

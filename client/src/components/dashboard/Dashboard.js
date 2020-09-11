@@ -65,7 +65,7 @@ const Dashboard = ({ auth }) => {
               <tbody>
                 {ownEvents &&
                   ownEvents.map((event) => (
-                    <tr>
+                    <tr key={event._id}>
                       <td>{event.name}</td>
                       <td>
                         Yo <i className='fas fa-hand-pointer text-primary'></i>

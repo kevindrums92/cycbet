@@ -8,6 +8,42 @@ import {
   SET_STAGE_REVIEW_DATA,
 } from '../actions/types';
 
+//Get event by Id
+export const getEventByID = (eventId, callback) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: true,
+  });
+  try {
+    const res = await axios.get(
+      `/api/events/getDataForUser/${eventId}`,
+      config
+    );
+    callback(res.data);
+    dispatch({
+      type: SET_EVENT_LOADING,
+      payload: false,
+    });
+  } catch (err) {
+    const { data } = err.response;
+    if (err && err.response && err.response.data && err.response.data.errors) {
+      err.response.data.errors.forEach((error) =>
+        dispatch(setAlert(error.msg, 'danger'))
+      );
+    } else if (data.msg) {
+      dispatch(setAlert(data.msg, 'danger'));
+    } else {
+      console.log(err);
+      dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
+    }
+  }
+};
+
 //getListVotes
 export const getListVotes = (stageId) => async (dispatch) => {
   const config = {
@@ -216,7 +252,7 @@ export const votePodium = (eventid, rider1, rider2, rider3, history) => async (
   });
 };
 
-//Vote podium
+//Vote Stage
 export const voteStage = (stageid, rider1, rider2, rider3, history) => async (
   dispatch
 ) => {
@@ -235,6 +271,52 @@ export const voteStage = (stageid, rider1, rider2, rider3, history) => async (
     await axios.post('/api/stages/vote', body, config);
     dispatch(setAlert('Guardado Exitosamente!', 'success'));
     history.goBack();
+  } catch (err) {
+    const { data } = err.response;
+    if (err && err.response && err.response.data && err.response.data.errors) {
+      err.response.data.errors.forEach((error) =>
+        dispatch(setAlert(error.msg, 'danger'))
+      );
+    } else if (data.msg) {
+      dispatch(setAlert(data.msg, 'danger'));
+    } else {
+      console.log(err);
+      dispatch(setAlert('Ha ocurrudo un error!', 'danger'));
+    }
+  }
+  dispatch({
+    type: SET_EVENT_LOADING,
+    payload: false,
+  });
+};
+
+//Set Stage Result
+export const setStageResult = (
+  stageid,
+  rider1,
+  rider2,
+  rider3,
+  eventid,
+  callback
+) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  const body = JSON.stringify({ stageid, rider1, rider2, rider3, eventid });
+
+  try {
+    dispatch({
+      type: SET_EVENT_LOADING,
+      payload: true,
+    });
+    const res = await axios.post('/api/stages/setResult', body, config);
+    dispatch({
+      type: SET_EVENT_LOADING,
+      payload: false,
+    });
+    callback(res.data);
   } catch (err) {
     const { data } = err.response;
     if (err && err.response && err.response.data && err.response.data.errors) {

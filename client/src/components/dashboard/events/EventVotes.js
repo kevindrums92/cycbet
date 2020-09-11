@@ -108,7 +108,7 @@ const EventVotes = ({
 
           <div className='card-body'>
             <hr />
-            {!podiumResult && (
+            {/* {!podiumResult && (
               <Link className='btn btn-dark' to={`/podiumvote/${event._id}`}>
                 {!myPodium && (
                   <>
@@ -121,7 +121,7 @@ const EventVotes = ({
                   </>
                 )}
               </Link>
-            )}
+            )} */}
           </div>
         </div>
       </div>
