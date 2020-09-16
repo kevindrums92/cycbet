@@ -42,12 +42,13 @@ const Status = ({ user, totalPoints, event }) => {
 
 Status.propTypes = {
   user: PropTypes.object,
-  totalPoints: PropTypes.number.isRequired,
+  totalPoints: PropTypes.number,
   event: PropTypes.object.isRequired,
 };
 
 Status.defaultProps = {
   user: {},
+  totalPoints: 0,
 };
 
 const mapStateToProps = ({ auth, event }) => ({

@@ -1,28 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getListVotes } from '../../../actions/event';
+import { getListVotesPodium } from '../../../actions/event';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Spinner from '../../layout/Spinner';
 
-const getHeaderSection = (stage) => {
-  return (
-    <div>
-      <h2 className='mt-5 mb-3'>{stage && stage.name}</h2>
-    </div>
-  );
-};
+const POINTS_1 = 200;
+const POINTS_2 = 100;
+const POINTS_3 = 90;
 
-const getTableSection = (eventUsers, votes, stageResult) => {
+const getTableSection = (eventUsers, votes, podiumResult) => {
   return (
     <table className='table'>
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Primero(50pts)</th>
-          <th>Segundo(20pts)</th>
-          <th>Tercero(10pts)</th>
+          <th>Primero({POINTS_1.toString()}pts)</th>
+          <th>Segundo({POINTS_2.toString()}pts)</th>
+          <th>Tercero({POINTS_3.toString()}pts)</th>
           <th>Puntos</th>
         </tr>
       </thead>
@@ -30,20 +26,20 @@ const getTableSection = (eventUsers, votes, stageResult) => {
         {eventUsers &&
           eventUsers.map((user) => {
             const vote = votes.find((e) => e.user === user.user._id);
-            let stageRes = null;
-            if (stageResult && stageResult.length > 0) {
-              stageRes = stageResult[0];
+            let podiumRes = null;
+            if (podiumResult && podiumResult.length > 0) {
+              podiumRes = podiumResult[0];
             }
             let assert1 =
-              stageRes && vote && vote.rider1._id === stageRes.rider1._id;
+              podiumRes && vote && vote.rider1._id === podiumRes.rider1._id;
             let assert2 =
-              stageRes && vote && vote.rider2._id === stageRes.rider2._id;
+              podiumRes && vote && vote.rider2._id === podiumRes.rider2._id;
             let assert3 =
-              stageRes && vote && vote.rider3._id === stageRes.rider3._id;
+              podiumRes && vote && vote.rider3._id === podiumRes.rider3._id;
             let pts = 0;
-            if (assert1) pts += 50;
-            if (assert2) pts += 20;
-            if (assert3) pts += 10;
+            if (assert1) pts += POINTS_1;
+            if (assert2) pts += POINTS_2;
+            if (assert3) pts += POINTS_3;
             return (
               <tr key={user.user._id}>
                 <td>
@@ -59,7 +55,7 @@ const getTableSection = (eventUsers, votes, stageResult) => {
                   {vote && (
                     <>
                       {vote.rider1.name}{' '}
-                      {stageRes && (
+                      {podiumRes && (
                         <>
                           {!assert1 ? (
                             <i className='fas fa-times-circle text-danger'></i>
@@ -76,7 +72,7 @@ const getTableSection = (eventUsers, votes, stageResult) => {
                   {vote && (
                     <>
                       {vote.rider2.name}{' '}
-                      {stageRes && (
+                      {podiumRes && (
                         <>
                           {!assert2 ? (
                             <i className='fas fa-times-circle text-danger'></i>
@@ -93,7 +89,7 @@ const getTableSection = (eventUsers, votes, stageResult) => {
                   {vote && (
                     <>
                       {vote.rider3.name}{' '}
-                      {stageRes && (
+                      {podiumRes && (
                         <>
                           {!assert3 ? (
                             <i className='fas fa-times-circle text-danger'></i>
@@ -114,21 +110,20 @@ const getTableSection = (eventUsers, votes, stageResult) => {
   );
 };
 
-const StageReview = ({
-  getListVotes,
+const PodiumReview = ({
+  getListVotesPodium,
   loading,
   history,
   event,
-  stage,
   eventUsers,
   votes,
-  stageResult,
+  podiumResult,
 }) => {
-  let { stageId } = useParams();
+  let { eventId } = useParams();
 
   useEffect(() => {
-    getListVotes(stageId);
-  }, [stageId, getListVotes]);
+    getListVotesPodium(eventId);
+  }, [eventId, getListVotesPodium]);
 
   return (
     <>
@@ -144,9 +139,8 @@ const StageReview = ({
       {!loading && (
         <>
           <h1 className='large text-primary'>{event && event.name}</h1>
-          {getHeaderSection(stage)}
           <div className='row'>
-            {getTableSection(eventUsers, votes, stageResult)}
+            {getTableSection(eventUsers, votes, podiumResult)}
           </div>
         </>
       )}
@@ -154,30 +148,27 @@ const StageReview = ({
   );
 };
 
-StageReview.propTypes = {
+PodiumReview.propTypes = {
   history: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   event: PropTypes.object,
-  stageResult: PropTypes.array,
+  podiumResult: PropTypes.array,
   votes: PropTypes.array,
   eventUsers: PropTypes.array,
-  stage: PropTypes.object,
 };
-StageReview.defaultProps = {
+PodiumReview.defaultProps = {
   event: null,
-  stageResult: null,
+  podiumResult: null,
   votes: null,
   eventUsers: null,
-  stage: null,
 };
 
-const mapStateToProps = ({ stage }) => ({
-  loading: stage.loading,
-  event: stage.event,
-  stageResult: stage.stageResult,
-  votes: stage.votes,
-  eventUsers: stage.eventUsers,
-  stage: stage.stage,
+const mapStateToProps = ({ event }) => ({
+  loading: event.loading,
+  event: event.event,
+  podiumResult: event.podiumResult,
+  votes: event.votes,
+  eventUsers: event.eventUsers,
 });
 
-export default connect(mapStateToProps, { getListVotes })(StageReview);
+export default connect(mapStateToProps, { getListVotesPodium })(PodiumReview);

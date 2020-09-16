@@ -165,23 +165,37 @@ router.post(
         return res.status(400).jsonp({ msg: 'Stage not found' });
       }
       //validar que el usuario no haya votado ya por este stage
-      let voteres = await Stageresult.findOne({ stage: stageid });
-      if (voteres) {
+      let stageResult = await Stageresult.findOne({ stage: stageid });
+      if (stageResult) {
         //Update
-        voteres = await Stageresult.findOneAndUpdate(
+        stageResult = await Stageresult.findOneAndUpdate(
           { stage: stageid },
           { $set: voteresultFields },
           { new: true }
         );
-        return res.json(voteres);
+      } else {
+        stageResult = new Stageresult(voteresultFields);
+        await stageResult.save();
       }
 
-      voteres = new Stageresult(voteresultFields);
-      await voteres.save();
-
-      res.json({
-        voteres,
-      });
+      const returnObj = await Stageresult.findById(stageResult._id).populate([
+        {
+          path: 'rider1',
+          model: 'Rider',
+          select: 'name',
+        },
+        {
+          path: 'rider2',
+          model: 'Rider',
+          select: 'name',
+        },
+        {
+          path: 'rider3',
+          model: 'Rider',
+          select: 'name',
+        },
+      ]);
+      res.json(returnObj);
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server Error');

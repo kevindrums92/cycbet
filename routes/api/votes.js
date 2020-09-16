@@ -44,9 +44,7 @@ router.post(
       }
 
       //Validar que este en el rango de fecha para votar
-      const maxdatevote = new Date(event.maxdatevotepodium)
-        .addDays(1)
-        .getTime();
+      const maxdatevote = new Date(event.maxdatevotepodium).getTime();
       const currentDate = new Date().getTime();
       if (currentDate > maxdatevote) {
         return res.status(400).jsonp({
