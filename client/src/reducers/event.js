@@ -2,6 +2,7 @@ import {
   SET_EVENT_DATA,
   SET_EVENT_LOADING,
   SET_RANKING_DATA,
+  SET_PODIUM_REVIEW_DATA,
 } from '../actions/types';
 
 const initialState = {
@@ -26,6 +27,7 @@ export default function (state = initialState, action) {
       };
     case SET_EVENT_DATA:
     case SET_RANKING_DATA:
+    case SET_PODIUM_REVIEW_DATA:
       return {
         ...state,
         loading: false,

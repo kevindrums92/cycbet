@@ -22,6 +22,7 @@ import Vote from './components/dashboard/events/Vote';
 import Ranking from './components/dashboard/events/Ranking';
 import ManageEvents from './components/dashboard/events/manage/ManageEvents';
 import StageReview from './components/dashboard/events/StageReview';
+import PodiumReview from './components/dashboard/events/PodiumReview';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -66,6 +67,11 @@ const App = () => {
                 exact
                 path='/stageReview/:stageId'
                 component={StageReview}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path='/podiumReview/:eventId'
+                component={PodiumReview}
               ></PrivateRoute>
               <PrivateRoute
                 exact
