@@ -372,4 +372,75 @@ router.post(
   }
 );
 
+// @route GET api/stages/getListVotes:stage_id
+// @desc get list of people votes by stage id
+// @access Private
+router.get('/getListVotesPodium/:event_id', [auth], async (req, res) => {
+  try {
+    const { event_id } = req.params;
+
+    const event = await Event.findById(event_id).populate([
+      {
+        path: 'creator',
+        model: 'User',
+        select: 'name avatar',
+      },
+    ]);
+    if (!event) {
+      return res.status(400).jsonp({ msg: 'Event not found' });
+    }
+
+    const podiumResult = await Podiumresult.find({ event: event_id }).populate([
+      {
+        path: 'rider1',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider2',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider3',
+        model: 'Rider',
+        select: 'name',
+      },
+    ]);
+    const votes = await Podiumvote.find({ event: event_id }).populate([
+      {
+        path: 'rider1',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider2',
+        model: 'Rider',
+        select: 'name',
+      },
+      {
+        path: 'rider3',
+        model: 'Rider',
+        select: 'name',
+      },
+    ]);
+
+    const eventUsers = await Eventusers.find({
+      event: event_id,
+    }).populate([
+      {
+        path: 'user',
+        model: 'User',
+        select: 'name avatar',
+      },
+    ]);
+    eventUsers.push({ user: event.creator });
+
+    res.json({ event, podiumResult, votes, eventUsers });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
